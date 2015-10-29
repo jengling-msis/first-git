@@ -25,6 +25,10 @@
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/favicon.png">
+  
+  <!-- Scripting
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	  <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 
 </head>
 <body>
@@ -46,10 +50,38 @@
 			  <li><a href="sub-one.html">Sub One</a></li>
 		  </ul>
 	  </aside>
-	  <section class="nine columns">
+	  <section class="nine columns" ng-app="myApp">
 		  <h2>Content Title</h2>
 		  <p><i>git pushed branch iss0001</i> Welcome to my new site.  I hope that you find all that you need here.</p>
 		  <p><i>git pushed branch iss0002.1</i> Here another update</p>
+		  <div ng-controller="personCtrl">
+
+		  	First Name: <input type="text" ng-model="firstName"><br><br/>
+		  	Last Name: <input type="text" ng-model="lastName"><br>
+		  	<br>
+		  	Full Name: {{fullName() | uppercase}}
+
+		  </div>
+		  <div ng-controller="customersCtrl">
+			  <h3><a href="http://www.w3schools.com/angular/angular_http.asp" target="_blank">Looping with objects:</a></h3>
+			  <p>Enter a letter to filter on: <input type="text" ng-model="test"></p>
+			  <p><i>Note: Names are being served from an JSON data online.</i></p>
+			  <ul>
+			    <li ng-repeat="x in names | filter:test | orderBy:'Name'">
+			    <a href="http://www.{{x.Country}}.com" target="_blank">{{ x.Name + ', ' + x.Country }}</a></li>
+			  </ul>
+		  </div>
+		  <div ng-controller="costCtrl">
+			  <h3>Making a number currency</h3>
+
+		  Quantity: <input type="number" ng-model="quantity"><br/>
+		  Price: <input type="number" ng-model="price">
+
+		  <p>Total = {{ (quantity * price) | currency }}</p>
+
+		  </div>
+		
+			  
 	  </section>
     </div>
 	<div class="row">
@@ -59,6 +91,25 @@
 		</footer>
 </div>
   </div>
+  <script>
+  var app = angular.module('myApp', []);
+  app.controller('customersCtrl', function($scope, $http) {
+      $http.get("http://www.w3schools.com/angular/customers.php")
+      .success(function(response) {$scope.names = response.records;});
+  });
+  app.controller('personCtrl', function($scope) {
+      $scope.firstName = "";
+      $scope.lastName = "";
+      $scope.fullName = function() {
+          return $scope.firstName + " " + $scope.lastName;
+      }
+  });
+  app.controller('costCtrl', function($scope) {
+      $scope.quantity = 0;
+      $scope.price = 0;
+  });
+  
+  </script>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
